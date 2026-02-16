@@ -1,0 +1,7 @@
+name: 'TV Schedule'
+type: module
+description: 'Provides a TV program schedule.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - drupal:node

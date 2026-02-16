@@ -1,0 +1,23 @@
+tv_schedule.admin_settings:
+  path: '/admin/config/media/tv-schedule'
+  defaults:
+    _form: '\Drupal\tv_schedule\Form\SettingsForm'
+    _title: 'TV Schedule Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+tv_schedule.show_schedule:
+  path: '/tv-schedule'
+  defaults:
+    _controller: '\Drupal\tv_schedule\Controller\ScheduleController::show'
+    _title: 'TV Schedule'
+  requirements:
+    _permission: 'access content'
+
+tv_schedule.project_form:
+  path: '/admin/tv-schedule/add-project'
+  defaults:
+    _form: '\Drupal\tv_schedule\Form\ScheduleForm'
+    _title: 'Add Project'
+  requirements:
+    _permission: 'administer site configuration'

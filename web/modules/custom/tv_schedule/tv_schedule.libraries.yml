@@ -1,0 +1,7 @@
+tv_schedule_styles:
+  version: 1.x
+  css:
+    theme:
+      css/tv_schedule.css: {}
+  js:
+    js/tv_schedule.js: {}

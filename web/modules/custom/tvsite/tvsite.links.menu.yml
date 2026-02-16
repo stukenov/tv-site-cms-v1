@@ -1,0 +1,10 @@
+tvsite.tv-menu:
+  title: 'Main Menu'
+  description: 'Main menu for TVSITE module'
+  parent: main
+
+tvsite.tv-menu.item1:
+  title: 'Settings'
+  description: 'Link to Settings Page'
+  parent: tvsite.tv-menu
+  route_name: tvsite.settings

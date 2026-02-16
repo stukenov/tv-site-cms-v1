@@ -1,0 +1,35 @@
+.tv-schedule {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tv-schedule .program {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .tv-schedule .time {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .tv-schedule .program-link {
+    color: blue;
+    text-decoration: none;
+  }
+  
+  .tv-schedule .program-link:hover {
+    text-decoration: underline;
+  }
+  
+  .tv-schedule .description {
+    font-size: 0.9em;
+    color: #666;
+  }
+  

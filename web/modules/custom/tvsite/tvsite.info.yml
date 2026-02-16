@@ -1,0 +1,7 @@
+name: 'TV Site'
+type: module
+description: 'Provides a engine for creating web site for TV channel.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - drupal:node

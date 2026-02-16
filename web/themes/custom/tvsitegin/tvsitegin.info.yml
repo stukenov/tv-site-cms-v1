@@ -1,0 +1,7 @@
+name: TV Site Theme
+type: theme
+base theme: bootstrap5
+description: 'A custom Gin subtheme for TV Site.'
+core_version_requirement: ^10 || ^11
+libraries:
+  - tvsitegin/global-styling

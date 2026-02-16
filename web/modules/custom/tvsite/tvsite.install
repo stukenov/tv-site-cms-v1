@@ -1,0 +1,283 @@
+<?php
+
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\node\Entity\NodeType;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+
+use Drupal\user\Entity\Role;
+
+function tvsite_install() {
+  // Create a new config object for the TVsite settings.
+  $config = \Drupal::configFactory()->getEditable('tvsite.settings');
+
+  // Set the default channel name.
+  $config->set('channel_name', 'My TV Channel');
+
+  // Save the configuration.
+  $config->save();
+
+  // Create content type 'Project'.
+  $node_type = NodeType::create([
+      'type' => 'project',
+      'name' => 'Project',
+  ]);
+
+  $node_type->save();
+  // Добавляем поля к типу контента Project.
+  $fields = [
+    'field_description' => ['label' => 'Description', 'field_type' => 'text_long', 'widget_type' => 'text_textarea', 'display_type' => 'text_default'],
+    'field_project_start_date' => ['label' => 'Project start date', 'field_type' => 'datetime', 'widget_type' => 'datetime_default', 'display_type' => 'datetime_default'],
+    'field_project_end_date' => ['label' => 'Project end date', 'field_type' => 'datetime', 'widget_type' => 'datetime_default', 'display_type' => 'datetime_default'],
+  ];
+
+  foreach ($fields as $field_name => $field_info) {
+    $field_storage = FieldStorageConfig::create([
+      'field_name' => $field_name,
+      'entity_type' => 'node',
+      'type' => $field_info['field_type'],
+    ]);
+    $field_storage->save();
+
+    $field_instance = FieldConfig::create([
+      'field_storage' => $field_storage,
+      'bundle' => 'project',
+      'label' => $field_info['label'],
+    ]);
+    $field_instance->save();
+
+    // Устанавливаем виджет формы по умолчанию.
+    $form_display = EntityFormDisplay::load('node.project.default');
+    if (!$form_display) {
+      $form_display = EntityFormDisplay::create([
+        'targetEntityType' => 'node',
+        'bundle' => 'project',
+        'mode' => 'default',
+        'status' => TRUE,
+      ]);
+    }
+    $form_display->setComponent($field_name, [
+      'type' => $field_info['widget_type'],
+    ])->save();
+
+    // Устанавливаем отображение поля по умолчанию.
+    $view_display = EntityViewDisplay::load('node.project.default');
+    if (!$view_display) {
+      $view_display = EntityViewDisplay::create([
+        'targetEntityType' => 'node',
+        'bundle' => 'project',
+        'mode' => 'default',
+        'status' => TRUE,
+      ]);
+    }
+    $view_display->setComponent($field_name, [
+      'type' => $field_info['display_type'],
+    ])->save();
+  }
+
+  // Create content type 'Serial'
+  $node_type = NodeType::create([
+      'type' => 'serial',
+      'name' => 'Serial',
+  ]);
+
+  $node_type->save();
+
+  // Define and create fields for 'Serial'.
+  $serial_fields = [
+    'field_serial_description' => ['label' => 'Serial description', 'field_type' => 'text_long', 'widget_type' => 'text_textarea', 'display_type' => 'text_default'],
+    'field_serial_start_date' => ['label' => 'Serial start date', 'field_type' => 'datetime', 'widget_type' => 'datetime_default', 'display_type' => 'datetime_default'],
+    'field_serial_end_date' => ['label' => 'Serial end date', 'field_type' => 'datetime', 'widget_type' => 'datetime_default', 'display_type' => 'datetime_default'],
+  ];
+
+  foreach ($serial_fields as $field_name => $field_info) {
+    $field_storage = FieldStorageConfig::create([
+      'field_name' => $field_name,
+      'entity_type' => 'node',
+      'type' => $field_info['field_type'],
+    ]);
+    $field_storage->save();
+
+    $field_instance = FieldConfig::create([
+      'field_storage' => $field_storage,
+      'bundle' => 'serial',
+      'label' => $field_info['label'],
+    ]);
+    $field_instance->save();
+
+    $form_display = EntityFormDisplay::load('node.serial.default');
+    if (!$form_display) {
+      $form_display = EntityFormDisplay::create([
+        'targetEntityType' => 'node',
+        'bundle' => 'serial',
+        'mode' => 'default',
+        'status' => TRUE,
+      ]);
+    }
+    $form_display->setComponent($field_name, [
+      'type' => $field_info['widget_type'],
+    ])->save();
+
+    $view_display = EntityViewDisplay::load('node.serial.default');
+    if (!$view_display) {
+      $view_display = EntityViewDisplay::create([
+        'targetEntityType' => 'node',
+        'bundle' => 'serial',
+        'mode' => 'default',
+        'status' => TRUE,
+      ]);
+    }
+    $view_display->setComponent($field_name, [
+      'type' => $field_info['display_type'],
+    ])->save();
+  }
+
+  // Create content type 'News'
+  $node_type = NodeType::create([
+      'type' => 'news',
+      'name' => 'News',
+  ]);
+
+  $node_type->save();
+
+  // Define and create fields for 'News'.
+  $news_fields = [
+    'field_news_description' => ['label' => 'News description', 'field_type' => 'text_long', 'widget_type' => 'text_textarea', 'display_type' => 'text_default'],
+    'field_news_date' => ['label' => 'News date', 'field_type' => 'datetime', 'widget_type' => 'datetime_default', 'display_type' => 'datetime_default'],
+  ];
+
+  foreach ($news_fields as $field_name => $field_info) {
+    $field_storage = FieldStorageConfig::create([
+      'field_name' => $field_name,
+      'entity_type' => 'node',
+      'type' => $field_info['field_type'],
+    ]);
+    $field_storage->save();
+
+    $field_instance = FieldConfig::create([
+      'field_storage' => $field_storage,
+      'bundle' => 'news',
+      'label' => $field_info['label'],
+    ]);
+    $field_instance->save();
+
+    $form_display = EntityFormDisplay::load('node.news.default');
+    if (!$form_display) {
+      $form_display = EntityFormDisplay::create([
+        'targetEntityType' => 'node',
+        'bundle' => 'news',
+        'mode' => 'default',
+        'status' => TRUE,
+      ]);
+    }
+    $form_display->setComponent($field_name, [
+      'type' => $field_info['widget_type'],
+    ])->save();
+
+    $view_display = EntityViewDisplay::load('node.news.default');
+    if (!$view_display) {
+      $view_display = EntityViewDisplay::create([
+        'targetEntityType' => 'node',
+        'bundle' => 'news',
+        'mode' => 'default',
+        'status' => TRUE,
+      ]);
+    }
+    $view_display->setComponent($field_name, [
+      'type' => $field_info['display_type'],
+    ])->save();
+  }
+
+  // Create content type 'Timetable'
+  $node_type = NodeType::create([
+      'type' => 'timetable',
+      'name' => 'Timetable',
+  ]);
+
+  $node_type->save();
+
+
+
+
+
+    //   Create User Role
+    $role = Role::create([
+        'id' => 'tv_site_manager',
+        'label' => 'TV Site Manager'
+    ]);
+
+    $role->grantPermission('manage tvsite');
+    $role->save();
+}
+
+function tvsite_uninstall() {
+  // Delete the TVsite settings configuration.
+  \Drupal::configFactory()->getEditable('tvsite.settings')->delete();
+
+  // Delete the created content type and its fields.
+  $node_type = NodeType::load('project');
+  if ($node_type) {
+    $node_type->delete();
+    $field_description = FieldConfig::loadByName('node', 'project', 'field_description');
+    if ($field_description) {
+        $field_description->delete();
+    }
+
+    $field_project_start_date = FieldConfig::loadByName('node', 'project', 'field_project_start_date');
+    if ($field_project_start_date) {
+        $field_project_start_date->delete();
+    }
+    $field_project_end_date = FieldConfig::loadByName('node', 'project', 'field_project_end_date');
+    if ($field_project_end_date) {
+        $field_project_end_date->delete();
+    }
+  }
+
+  // Delete content type 'Serial'
+  $node_type = NodeType::load('serial');
+  if ($node_type) {
+    $node_type->delete();
+    $field_serial_description = FieldConfig::loadByName('node', 'serial', 'field_serial_description');
+    if ($field_serial_description) {
+        $field_serial_description->delete();
+    }
+    $field_serial_start_date = FieldConfig::loadByName('node', 'serial', 'field_serial_start_date');
+    if ($field_serial_start_date) {
+        $field_serial_start_date->delete();
+    }
+    $field_serial_end_date = FieldConfig::loadByName('node', 'serial', 'field_serial_end_date');
+    if ($field_serial_end_date) {
+        $field_serial_end_date->delete();
+    }
+  }
+
+  // Delete content type 'News'
+  $node_type = NodeType::load('news');
+  if ($node_type) {
+    $node_type->delete();
+    $field_news_description = FieldConfig::loadByName('node', 'news', 'field_news_description');
+    if ($field_news_description) {
+        $field_news_description->delete();
+    }
+    $field_news_date = FieldConfig::loadByName('node', 'news', 'field_news_date');
+    if ($field_news_date) {
+        $field_news_date->delete();
+    }
+  }
+
+  // Delete content type 'Timetable'
+  $node_type = NodeType::load('timetable');
+  if ($node_type) {
+    $node_type->delete();
+  }
+
+    //   Delete Role
+    $role = Role::load('tv_site_manager');
+    if ($role) {
+        $role->delete();
+    }
+}
+

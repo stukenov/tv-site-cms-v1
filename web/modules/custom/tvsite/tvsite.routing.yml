@@ -1,0 +1,8 @@
+tvsite.settings:
+  path: '/admin/config/media/tvsite'
+  defaults:
+    _form: '\Drupal\tvsite\Form\TvsiteSettingsForm'
+    _title: 'TV Site settings'
+  requirements:
+    _permission: 'manage tvsite'
+
